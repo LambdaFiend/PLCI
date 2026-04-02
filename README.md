@@ -7,7 +7,7 @@ This is an interpreter made for anyone who might be interested in experimenting 
 
 Multiple features are still missing, but its got the bare minimum. That is, *Applicative Order Reduction* and *Normal Order Reduction* for evaluation.
 
-Although step-by-step evaluation is not available (*yet*), each strategy has its own unique properties, some of which can be noticed using only evaluation up-to normal form (which is when there aren't redexes any longer).
+Although step-by-step evaluation is not available (*yet*), each strategy has its own unique properties, some of which can be noticed using only evaluation up-to normal form (which is when there are no more redexes).
 
 ## Syntax and Semantics
 
