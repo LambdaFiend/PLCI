@@ -1,0 +1,59 @@
+cabal-version: 3.0
+name:          PLCI
+version:       0.1.0.0
+synopsis:      A Pure Lambda Calculus Interpreter.
+
+description:
+  This interpreter is meant to help anyone figure out how pure lambda calculus works,
+  as well as for anyone who would like to test multiple lambda-terms.
+
+homepage:     https://github.com/LambdaFiend/PLCI
+license:      BSD-3-Clause
+license-file: LICENSE
+author:       Lambda Fiend
+maintainer:   thelambdafiend@gmail.com
+
+--copyright:
+
+category:   Language
+build-type: Simple
+
+extra-doc-files:
+  CHANGELOG.md
+  README.md
+
+--extra-source-files:
+
+common warnings
+  --ghc-options: 
+
+executable PLCI
+  import:         warnings
+  main-is:        Main.hs
+  hs-source-dirs: src
+
+  other-modules:
+    Helper,
+    Lexer,
+    Parser,
+    Evaluation,
+    Syntax
+
+  --other-extensions:
+
+  build-depends: 
+    base ^>=4.20.2.0,
+    array ^>=0.5.8.0,
+    directory ^>=1.3.10.1,
+    ansi-terminal ^>=1.1.5,
+    terminfo ^>=0.4.1.7,
+    haskeline ^>=0.8.2.1
+
+  hs-source-dirs:
+    app
+    src
+    programs
+
+  default-language: Haskell2010
+
+  --default-extensions:
