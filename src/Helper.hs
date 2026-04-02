@@ -1,6 +1,6 @@
 module Helper where
 
-import           Debug.Trace
+import           Data.List
 import           Syntax
 
 tmMap :: (Term -> Term) -> TermNode -> TermNode
@@ -72,3 +72,41 @@ areIndexesBroken' ctx n t =
     TmAbs x t1 -> areIndexesBroken' (x : ctx) (n + 1) t1
     TmApp t1 t2 -> areIndexesBroken' ctx n t1 || areIndexesBroken' ctx n t2
     _ -> False
+
+fixNames :: TermNode -> Maybe TermNode
+fixNames t = fixNames' (getFreeVars t) t
+
+fixNames' :: Context -> TermNode -> Maybe TermNode
+fixNames' ctx (TermNode fi tm) =
+  Just (TermNode fi)
+    <*> case tm of
+      TmVar (Bound k l) _ ->
+        if k >= 0 && k < length ctx
+          then Just $ TmVar (Bound k l) (ctx !! k)
+          else Nothing
+      TmAbs x t1 ->
+        let x' = fixName ctx x
+         in case fixNames' (x' : ctx) t1 of
+              Nothing  -> Nothing
+              Just t1' -> Just $ TmAbs x' t1'
+      TmApp t1 t2 ->
+        case (fixNames' ctx t1, fixNames' ctx t2) of
+          (Just t1', Just t2') -> Just $ TmApp t1' t2'
+          _                    -> Nothing
+      _ -> Just tm
+
+fixName :: Context -> Name -> Name
+fixName ctx x
+  | elem x ctx = fixName ctx (x ++ "'")
+  | otherwise = x
+
+getFreeVars :: TermNode -> [Name]
+getFreeVars t = getFreeVars' t
+
+getFreeVars' :: TermNode -> [Name]
+getFreeVars' t =
+  case getTm t of
+    TmVar Free x -> [x]
+    TmAbs _ t1   -> getFreeVars' t1
+    TmApp t1 t2  -> getFreeVars' t1 `union` getFreeVars' t2
+    _            -> []
