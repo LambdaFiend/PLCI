@@ -7,6 +7,10 @@ data EvalStrat
   = NormalOrder
   | ApplicativeOrder
 
+data EvalNumber
+  = Total
+  | Partial Int
+
 instance Show (EvalStrat) where
   show NormalOrder      = "normal order reduction"
   show ApplicativeOrder = "applicative order reduction"
@@ -17,6 +21,8 @@ hasRedex :: TermNode -> Bool
 hasRedex t =
   case getTm t of
     TmApp (TermNode _ (TmAbs _ _)) _ -> True
+    TmApp t1 t2                      -> hasRedex t1 || hasRedex t2
+    TmAbs _ t1                       -> hasRedex t1
     _                                -> False
 
 evalAppOrder1 :: EvalFun
@@ -64,14 +70,20 @@ tryEvalTwo f (t1, t2) =
         Right t2' -> Right (t1, t2')
     Right t1' -> Right (t1', t2)
 
-eval :: EvalStrat -> TermNode -> TermNode
-eval evalStrat t = eval' (getEvalFun evalStrat) t
+eval :: EvalStrat -> EvalNumber -> TermNode -> TermNode
+eval evalStrat n t = eval' (getEvalFun evalStrat) n t
 
-eval' :: EvalFun -> TermNode -> TermNode
-eval' evalFun t =
+eval' :: EvalFun -> EvalNumber -> TermNode -> TermNode
+eval' evalFun Total t =
   case evalFun t of
     Left _  -> t
-    Right r -> eval' evalFun r
+    Right r -> eval' evalFun Total r
+eval' evalFun (Partial n) t
+  | n <= 0 = t
+  | otherwise =
+      case evalFun t of
+        Left _  -> t
+        Right r -> eval' evalFun (Partial (n - 1)) r
 
 getEvalFun :: EvalStrat -> EvalFun
 getEvalFun ApplicativeOrder = evalAppOrder1

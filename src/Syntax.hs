@@ -52,10 +52,11 @@ instance Eq (TermNode) where
   (TermNode _ t1) == (TermNode _ t2) = t1 == t2
 
 instance Eq (Term) where
-  (TmApp t11 t12) == (TmApp t21 t22) = t11 == t21 && t12 == t22
-  (TmAbs _ t1) == (TmAbs _ t2)       = t1 == t2
-  (TmVar k1 _) == (TmVar k2 _)       = k1 == k2
-  _ == _                             = False
+  (TmApp t11 t12) == (TmApp t21 t22)               = t11 == t21 && t12 == t22
+  (TmAbs _ t1) == (TmAbs _ t2)                     = t1 == t2
+  (TmVar (Bound k1 _) _) == (TmVar (Bound k2 _) _) = k1 == k2
+  (TmVar Free x1) == (TmVar Free x2)               = x1 == x2
+  _ == _                                           = False
 
 collectCurry :: TermNode -> ([Name], TermNode)
 collectCurry (TermNode _ (TmAbs x t1)) = (x : xs, t1')
