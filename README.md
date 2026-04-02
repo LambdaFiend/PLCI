@@ -5,9 +5,17 @@
 
 This is an interpreter made for anyone who might be interested in experimenting with the *pure lambda calculus*.
 
-Multiple features are still missing, but its got the bare minimum. That is, *Applicative Order Reduction* and *Normal Order Reduction* for evaluation.
+Supports environment variables for lambda-term, showing the contents of an environtment variables, displaying the list of environment variables, checking for alpha equivalence, checking for beta-normal-form, evaluating n-steps at a time (in-place, for environment variables), applicative-order reduction and normal-order reduction.
 
-Although step-by-step evaluation is not available (*yet*), each strategy has its own unique properties, some of which can be noticed using only evaluation up-to normal form (which is when there are no more redexes).
+## Running the program
+
+Haskell and Cabal should both be installed.
+
+```cabal build```
+
+```cabal run```
+
+Type :?, :h or :help for help within the program.
 
 ## Syntax and Semantics
 
@@ -22,14 +30,6 @@ The λ (lambda) symbol is a synonym of \\.
 Applications are conventionally left associative, and abstractions right associative.
 
 Abstracted variables can be curried, which means that ```\x.\y.\z.(x z) (y z)``` is the same as ```\x y z.(x z) (y z)```.
-
-## Running the program
-
-Haskell and Cabal should both be installed.
-
-```cabal build```
-
-```cabal run```
 
 ## Reporting issues
 
