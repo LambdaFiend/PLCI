@@ -45,7 +45,7 @@ main = do
       case Just words <*> maybeInput of
         Nothing -> pure ()
         Just (h : []) | elem h [":?", ":h", ":help"] -> outputStrLn commandList >>= \_ -> repl strat env
-        Just (q : []) | elem q [":q", ":quit"] -> return ()
+        Just (q : []) | elem q [":q", ":quit"] -> pure ()
         Just (order : []) | elem order [":norm", ":appl"] -> do
           case (getStratData order) of
             Just order' -> do
@@ -55,7 +55,7 @@ main = do
         Just (":let" : x : "=" : txt)
           | and (map isAlpha x) ->
               getTermNode (intercalate " " txt) >>= \maybeAST -> tryMaybeAST maybeAST (\ast -> repl strat ((x, ast) : env))
-        Just (":showenv" : []) -> outputStrLn $ show $ nub $ map fst env
+        Just (":showenv" : []) -> outputStrLn $ show $ nub $ map fst env >>= \_ -> repl strat env
         Just (beta : x : []) | lookup x env /= Nothing && elem beta [":b", ":beta", ":bnf", ":normalform"] -> case lookup x env of Just ast -> outputStrLn (x ++ " is" ++ (if hasRedex ast then " not in " else " in ") ++ "beta-normal-form") >>= \_ -> repl strat env; Nothing -> pure ()
         Just (e : x : [])
           | lookup x env /= Nothing && elem e [":e", ":eval"] ->
