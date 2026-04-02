@@ -5,7 +5,7 @@
 
 This is an interpreter made for anyone who might be interested in experimenting with the *pure lambda calculus*.
 
-Supports environment variables for *lambda-term*, showing the contents of an environtment variables, displaying the list of environment variables, checking for *alpha-equivalence*, checking for *beta-normal-form*, evaluating n-steps at a time (in-place, for environment variables), *applicative-order reduction* and *normal-order reduction*.
+Supports environment variables for *lambda-terms*, showing the contents of an environtment variables, displaying the list of environment variables, checking for *alpha-equivalence*, checking for *beta-normal-form*, evaluating n-steps at a time (in-place, for environment variables), *applicative-order reduction* and *normal-order reduction*.
 
 I'll be adding a couple more features, eventually. Also, the parser is not the greatest as some parenthesis, which could be left out, can't be omitted. I'll fix that (eventually as well).
 
